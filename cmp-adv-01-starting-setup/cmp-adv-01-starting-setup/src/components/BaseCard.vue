@@ -1,15 +1,28 @@
 <template>
-    <section>
+  <section>
+    <header>
+        <slot name="header"  v-if="$slots.header">
+          <h2>The Default</h2>
+        </slot>
+    </header>
+    
         <slot></slot>
     </section>
 
 </template>
 <script>
 export default {
-    
+    mounted(){
+      console.log(this.$slots);
+    }
 }
 </script>
 <style scoped>
+section header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 section {
   margin: 2rem auto;
   max-width: 30rem;
