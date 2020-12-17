@@ -3,9 +3,12 @@
     <base-card>
       <h2>Submitted Experiences</h2>
       <div>
-        <base-button>Load Submitted Experiences</base-button>
+        <base-button @click="loadExperiences">Load Submitted Experiences</base-button>
       </div>
-      <ul>
+      <p v-if='isLoading'>Loading...</p>
+      <p v-else-if="!isLoading  && error">{{error}}</p>
+      <p v-else-if="!isLoading && (!results || results.length === 0)">No stored experience found. Start adding some survet results first.</p>
+      <ul v-else>
         <survey-result
           v-for="result in results"
           :key="result.id"
@@ -21,10 +24,49 @@
 import SurveyResult from './SurveyResult.vue';
 
 export default {
-  props: ['results'],
   components: {
     SurveyResult,
   },
+  data() {
+    return {
+      results: [],
+      isLoading: false,
+      error: null
+    };
+  },
+  methods: {
+    loadExperiences() {
+      this.isLoading = true;
+      fetch('https://ilily-f5652.firebaseio.com/surveys.json').then((response)=>{
+        if (response.ok) {
+          return response.json();
+        }
+      }).then((data)=> {
+        this.isLoading = false;
+        this.error = null
+        const results = [];
+        for(const id in data) {
+          results.push({
+              id: id, 
+              name: data[id].name, 
+              rating: data[id].rating
+          });
+        }
+        this.results = results;
+      })
+      .catch((error)=>{
+        this.isLoading = false;
+        console.log(error);
+        this.error = "Failed o fetch data - please try again next time";
+      });
+    }
+    
+  },
+  mounted() {
+      this.loadExperiences();
+  }
+
+
 };
 </script>
 
