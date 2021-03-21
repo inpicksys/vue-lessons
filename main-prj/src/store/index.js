@@ -10,7 +10,6 @@ const store = createStore({
     requests: requestsModule,
     auth: authModule
   }
- 
 });
 
 export default store;

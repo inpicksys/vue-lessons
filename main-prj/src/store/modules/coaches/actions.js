@@ -1,18 +1,19 @@
 export default {
   async registerCoach(context, data) {
     const userId = context.rootGetters.userId;
-    alert(userId);
-    let coachData = {
+    const coachData = {
       firstName: data.first,
       lastName: data.last,
       description: data.desc,
       hourlyRate: data.rate,
       areas: data.areas
     };
-    
+
+    const token = context.rootGetters.token;
 
     const response = await fetch(
-      `https://ilily-f5652.firebaseio.com/coaches/${userId}.json`,
+      `https://ilily-f5652.firebaseio.com//coaches/${userId}.json?auth=` +
+        token,
       {
         method: 'PUT',
         body: JSON.stringify(coachData)
@@ -38,7 +39,6 @@ export default {
     const response = await fetch(
       `https://ilily-f5652.firebaseio.com/coaches.json`
     );
-    debugger;
     const responseData = await response.json();
 
     if (!response.ok) {

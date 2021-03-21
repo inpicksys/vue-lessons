@@ -1,13 +1,13 @@
 import mutations from './mutations.js';
 import actions from './actions.js';
-import getters from './getters';
+import getters from './getters.js';
 
 export default {
-    state() {   
-        return {
-            userId: null,
-            token: null,
-            tokenExpiration: null
+  state() {
+    return {
+      userId: null,
+      token: null,
+      didAutoLogout: false
     };
   },
   mutations,
